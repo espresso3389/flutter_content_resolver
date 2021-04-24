@@ -1,18 +1,41 @@
-// You have generated a new plugin project without
-// specifying the `--platforms` flag. A plugin project supports no platforms is generated.
-// To add platforms, run `flutter create -t plugin --platforms <platforms> .` under the same
-// directory. You can also find a detailed instruction on how to add platforms in the `pubspec.yaml` at https://flutter.dev/docs/development/packages-and-plugins/developing-packages#plugin-platforms.
-
 import 'dart:async';
+import 'dart:ffi';
+import 'dart:typed_data';
 
 import 'package:flutter/services.dart';
 
+/// Resolves `content:xxxx` style URI using [ContentResolver](https://developer.android.com/reference/android/content/ContentResolver).
 class ContentResolver {
-  static const MethodChannel _channel =
-      const MethodChannel('content_resolver');
+  ContentResolver._(this.address, this.length);
 
-  static Future<String?> get platformVersion async {
-    final String? version = await _channel.invokeMethod('getPlatformVersion');
-    return version;
+  /// Buffer address.
+  final int address;
+
+  /// Buffer length.
+  final int length;
+
+  static const MethodChannel _channel = const MethodChannel('content_resolver');
+
+  /// Directly get the content in [Uint8List] buffer.
+  static Future<Uint8List> resolveContent(Uri uri) async {
+    final cr = await resolve(uri);
+    final ret = Uint8List.fromList(cr.buffer);
+    cr.dispose();
+    return ret;
   }
+
+  /// For advanced use only; obtaining [ContentResolver] that manages content buffer.
+  /// the instance must be released by calling [dispose] method.
+  static Future<ContentResolver> resolve(Uri uri) async {
+    final result = await _channel.invokeMethod('getContent', uri.toString());
+    return ContentResolver._(result['address'] as int, result['length'] as int);
+  }
+
+  /// Dispose the associated native buffer.
+  Future<void> dispose() async {
+    await _channel.invokeMethod('releaseBuffer', address);
+  }
+
+  /// Buffer that contains the content.
+  Uint8List get buffer => Pointer<Uint8>.fromAddress(address).asTypedList(length);
 }

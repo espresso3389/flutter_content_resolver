@@ -1,18 +1,24 @@
 # content_resolver
 
-A new flutter plugin project.
+The plugin is to resolve Android's content URI that is often used by [Content providers](https://developer.android.com/guide/topics/providers/content-providers).
 
-## Getting Started
+# Install
 
-This project is a starting point for a Flutter
-[plug-in package](https://flutter.dev/developing-packages/),
-a specialized package that includes platform-specific implementation code for
-Android and/or iOS.
+Add this to your package's pubspec.yaml file and execute flutter pub get:
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+```
+dependencies:
+    content_resolver: ^0.0.1
+```
 
-The plugin project was generated without specifying the `--platforms` flag, no platforms are currently supported.
-To add platforms, run `flutter create -t plugin --platforms <platforms> .` under the same
-directory. You can also find a detailed instruction on how to add platforms in the `pubspec.yaml` at https://flutter.dev/docs/development/packages-and-plugins/developing-packages#plugin-platforms.
+# Usage
+
+The following fragment is a use case with [app_links](https://pub.dev/packages/app_links) to receive `content:...` URI content:
+
+```dart
+_appLinks = AppLinks(onAppLink: (uri) async {
+  // If the data is some image, you can pass the data directly to Image.data or something.
+  final Uint8List data = await ContentResolver.resolveContent(uri);
+  ...
+});
+```
