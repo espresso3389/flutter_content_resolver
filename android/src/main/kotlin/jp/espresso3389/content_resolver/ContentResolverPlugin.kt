@@ -1,7 +1,7 @@
 package jp.espresso3389.content_resolver
 
 import android.net.Uri
-import android.os.MemoryFile
+import android.os.ParcelFileDescriptor
 import androidx.annotation.NonNull
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin
@@ -9,7 +9,9 @@ import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
+import java.io.BufferedInputStream
 import java.io.ByteArrayOutputStream
+import java.io.InputStream
 import java.nio.ByteBuffer
 
 /** ContentResolverPlugin */
@@ -30,27 +32,34 @@ class ContentResolverPlugin: FlutterPlugin, MethodCallHandler {
   override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
     var address = 0L
     try {
-      if (call.method == "getContent") {
-        val input = flutterPluginBinding.applicationContext.contentResolver.openInputStream(Uri.parse(call.arguments as String))
-          ?: throw IllegalArgumentException("Could not open specified content: ${call.arguments}")
-        input.use {
-          val buffer = ByteArrayOutputStream()
-          it.copyTo(buffer)
-          val (address_, byteBuffer) = allocBuffer(buffer.size())
-          address = address_
-          byteBuffer.put(buffer.toByteArray())
-          result.success(hashMapOf("address" to address, "length" to buffer.size()))
-        }
-      } else if (call.method == "releaseBuffer") {
-        releaseBuffer(call.arguments as Long)
-        result.success(0)
-      } else {
-        result.notImplemented()
+      when (call.method) {
+          "getContent" -> {
+            openInputStream(Uri.parse(call.arguments as String)).use {
+              val buffer = ByteArrayOutputStream()
+              it.copyTo(buffer)
+              val (address_, byteBuffer) = allocBuffer(buffer.size())
+              address = address_
+              byteBuffer.put(buffer.toByteArray())
+              result.success(hashMapOf("address" to address, "length" to buffer.size()))
+            }
+          }
+          "releaseBuffer" -> {
+            releaseBuffer(call.arguments as Long)
+            result.success(0)
+          }
+          else -> {
+            result.notImplemented()
+          }
       }
     } catch (e: Exception) {
       releaseBuffer(address)
       result.error("exception", "Internal error.", e)
     }
+  }
+
+  private fun openInputStream(uri: Uri): InputStream {
+    val cr = flutterPluginBinding.applicationContext.contentResolver
+    return BufferedInputStream(ParcelFileDescriptor.AutoCloseInputStream(cr.openFileDescriptor(uri, "r")))
   }
 
   override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
