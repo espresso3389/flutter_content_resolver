@@ -23,7 +23,15 @@ class _MyAppState extends State<MyApp> {
     super.initState();
     // This example illustrates how to deal with the content intent with ContentResolver.
     _appLinks = AppLinks(onAppLink: (uri) async {
-      _imageDataSubject.add(await ContentResolver.resolveContent(uri));
+      // NOTE: AppLinks uses Uri class but it may break certain content URIs like Slack's one;
+      // Slack's content URI is currently content://com.Slack.fileprovider/... form and the most problematic issue
+      // with the URI is capitalized `S` inside the host name; Dart's Uri class will make the host name lower-case
+      // and the resulting URI can not be resolved with Content Resolver any longer :(
+      // Possble, but dirty workaround might be replacing these host names on your code.
+      final uriStr =
+          uri.toString().replaceFirst('content://com.slack.fileprovider/', 'content://com.Slack.fileprovider/');
+
+      _imageDataSubject.add(await ContentResolver.resolveContent(uriStr));
     });
   }
 

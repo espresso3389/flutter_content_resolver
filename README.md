@@ -8,7 +8,7 @@ Add this to your package's pubspec.yaml file and execute flutter pub get:
 
 ```
 dependencies:
-    content_resolver: ^0.0.1
+    content_resolver: ^0.0.2
 ```
 
 # Usage
