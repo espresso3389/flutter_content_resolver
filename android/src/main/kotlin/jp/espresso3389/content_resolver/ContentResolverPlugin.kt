@@ -10,8 +10,10 @@ import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 import java.io.BufferedInputStream
+import java.io.BufferedOutputStream
 import java.io.ByteArrayOutputStream
 import java.io.InputStream
+import java.io.OutputStream
 import java.nio.ByteBuffer
 
 /** ContentResolverPlugin */
@@ -43,6 +45,15 @@ class ContentResolverPlugin: FlutterPlugin, MethodCallHandler {
               result.success(hashMapOf("address" to address, "length" to buffer.size()))
             }
           }
+          "writeContent" -> {
+            openOutputStream(Uri.parse(call.argument<String>("uri") as String), call.argument<String>("mode") as String).use {
+              it.write(call.argument<String>("bytes") as ByteArray)
+              it.flush()
+              it.close()
+
+              result.success(0)
+            }
+          }
           "releaseBuffer" -> {
             releaseBuffer(call.arguments as Long)
             result.success(0)
@@ -60,6 +71,11 @@ class ContentResolverPlugin: FlutterPlugin, MethodCallHandler {
   private fun openInputStream(uri: Uri): InputStream {
     val cr = flutterPluginBinding.applicationContext.contentResolver
     return BufferedInputStream(ParcelFileDescriptor.AutoCloseInputStream(cr.openFileDescriptor(uri, "r")))
+  }
+
+  private fun openOutputStream(uri: Uri, mode: String): OutputStream {
+    val cr = flutterPluginBinding.applicationContext.contentResolver
+    return BufferedOutputStream(ParcelFileDescriptor.AutoCloseOutputStream(cr.openFileDescriptor(uri, mode)))
   }
 
   override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
