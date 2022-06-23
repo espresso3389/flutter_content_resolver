@@ -48,11 +48,8 @@ class ContentResolverPlugin: FlutterPlugin, MethodCallHandler {
           "writeContent" -> {
             openOutputStream(Uri.parse(call.argument<String>("uri") as String), call.argument<String>("mode") as String).use {
               it.write(call.argument<String>("bytes") as ByteArray)
-              it.flush()
-              it.close()
-
-              result.success(0)
             }
+            result.success(0)
           }
           "releaseBuffer" -> {
             releaseBuffer(call.arguments as Long)

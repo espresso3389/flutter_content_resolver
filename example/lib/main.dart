@@ -27,9 +27,10 @@ class _MyAppState extends State<MyApp> {
       // Slack's content URI is currently content://com.Slack.fileprovider/... form and the most problematic issue
       // with the URI is capitalized `S` inside the host name; Dart's Uri class will make the host name lower-case
       // and the resulting URI can not be resolved with Content Resolver any longer :(
-      // Possble, but dirty workaround might be replacing these host names on your code.
-      final uriStr =
-          uri.toString().replaceFirst('content://com.slack.fileprovider/', 'content://com.Slack.fileprovider/');
+      // Possible, but dirty workaround might be replacing these host names on your code.
+      final uriStr = uri.toString().replaceFirst(
+          'content://com.slack.fileprovider/',
+          'content://com.Slack.fileprovider/');
 
       _imageDataSubject.add(await ContentResolver.resolveContent(uriStr));
     });
@@ -52,7 +53,9 @@ class _MyAppState extends State<MyApp> {
             stream: _imageDataSubject.stream,
             builder: (context, snapshot) {
               return Center(
-                child: snapshot.hasData ? Image.memory(snapshot.data!) : Text('Nothing received.'),
+                child: snapshot.hasData
+                    ? Image.memory(snapshot.data!)
+                    : Text('Nothing received.'),
               );
             }),
       ),

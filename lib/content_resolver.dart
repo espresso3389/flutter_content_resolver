@@ -31,16 +31,19 @@ class ContentResolver {
   static Future<ContentResolver> resolve(String uri) async {
     try {
       final result = await _channel.invokeMethod('getContent', uri);
-      return ContentResolver._(result['address'] as int, result['length'] as int);
+      return ContentResolver._(
+          result['address'] as int, result['length'] as int);
     } on Exception {
       throw Exception('Handling URI "$uri" failed.');
     }
   }
 
   /// Directly writes a content as a [Uint8List]
-  static Future<void> writeContent(String uri, Uint8List bytes, {String mode = "wt"}) async {
+  static Future<void> writeContent(String uri, Uint8List bytes,
+      {String mode = "wt"}) async {
     try {
-      final result = await _channel.invokeMethod('writeContent', {"uri": uri, "bytes": bytes, "mode": mode});
+      await _channel.invokeMethod(
+          'writeContent', {"uri": uri, "bytes": bytes, "mode": mode});
     } on Exception {
       throw Exception('Handling URI "$uri" failed.');
     }
@@ -52,5 +55,6 @@ class ContentResolver {
   }
 
   /// Buffer that contains the content.
-  Uint8List get buffer => Pointer<Uint8>.fromAddress(address).asTypedList(length);
+  Uint8List get buffer =>
+      Pointer<Uint8>.fromAddress(address).asTypedList(length);
 }

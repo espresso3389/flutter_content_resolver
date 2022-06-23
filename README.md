@@ -2,18 +2,18 @@
 
 The plugin is to resolve Android's content URI that is often used by [Content providers](https://developer.android.com/guide/topics/providers/content-providers).
 
-# Install
+## Install
 
 Add this to your package's pubspec.yaml file and execute flutter pub get:
 
-```
+```yaml
 dependencies:
-    content_resolver: ^0.0.2
+    content_resolver: ^0.1.0
 ```
 
-# Usage
+## Usage
 
-## Resolving content
+### Resolving content
 
 The following fragment is a use case with [app_links](https://pub.dev/packages/app_links) to receive `content:...` URI content:
 
@@ -25,9 +25,9 @@ _appLinks = AppLinks(onAppLink: (uri) async {
 });
 ```
 
-## Writing content
+### Writing content
 
-The following fragment is a use case to write to `content:...` URI content:
+The following fragment illustrates how to write data to `content:...` URI:
 
 ```dart
   final data = Uint8List.fromList(utf8.encode('Hello World'));
@@ -35,3 +35,4 @@ The following fragment is a use case to write to `content:...` URI content:
   ...
 ```
 
+Please note that if the URI is not writable, the code throws certain exception.
