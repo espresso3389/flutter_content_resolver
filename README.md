@@ -13,6 +13,8 @@ dependencies:
 
 # Usage
 
+## Resolving content
+
 The following fragment is a use case with [app_links](https://pub.dev/packages/app_links) to receive `content:...` URI content:
 
 ```dart
@@ -22,3 +24,14 @@ _appLinks = AppLinks(onAppLink: (uri) async {
   ...
 });
 ```
+
+## Writing content
+
+The following fragment is a use case to write to `content:...` URI content:
+
+```dart
+  final data = Uint8List.fromList(utf8.encode('Hello World'));
+  await ContentResolver.writeContent(uri.toString(), data);
+  ...
+```
+

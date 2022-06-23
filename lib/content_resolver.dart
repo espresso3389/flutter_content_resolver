@@ -37,6 +37,15 @@ class ContentResolver {
     }
   }
 
+  /// Directly writes a content as a [Uint8List]
+  static Future<void> writeContent(String uri, Uint8List bytes, {String mode = "wt"}) async {
+    try {
+      final result = await _channel.invokeMethod('writeContent', {"uri": uri, "bytes": bytes, "mode": mode});
+    } on Exception {
+      throw Exception('Handling URI "$uri" failed.');
+    }
+  }
+
   /// Dispose the associated native buffer.
   Future<void> dispose() async {
     await _channel.invokeMethod('releaseBuffer', address);
