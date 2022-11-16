@@ -1,10 +1,7 @@
 import 'dart:async';
 import 'dart:ffi';
-import 'dart:typed_data';
 
 import 'package:flutter/services.dart';
-
-typedef _UriFilter = String Function(Uri uri);
 
 /// Resolves `content:xxxx` style URI using [ContentResolver](https://developer.android.com/reference/android/content/ContentResolver).
 class ContentResolver {

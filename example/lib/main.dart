@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:app_links/app_links.dart';
@@ -17,12 +18,14 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   final _imageDataSubject = PublishSubject<Uint8List>();
   late final AppLinks _appLinks;
+  late final StreamSubscription<Uri> _appLinksSub;
 
   @override
   void initState() {
     super.initState();
     // This example illustrates how to deal with the content intent with ContentResolver.
-    _appLinks = AppLinks(onAppLink: (uri) async {
+    _appLinks = AppLinks();
+    _appLinksSub = _appLinks.uriLinkStream.listen((uri) async {
       // NOTE: AppLinks uses Uri class but it may break certain content URIs like Slack's one;
       // Slack's content URI is currently content://com.Slack.fileprovider/... form and the most problematic issue
       // with the URI is capitalized `S` inside the host name; Dart's Uri class will make the host name lower-case
@@ -38,6 +41,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void dispose() {
+    _appLinksSub.cancel();
     _imageDataSubject.close();
     super.dispose();
   }

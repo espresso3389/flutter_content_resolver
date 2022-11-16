@@ -1,3 +1,7 @@
+## 0.2.0
+
+* Fixes and updates.
+
 ## 0.1.0
 
 * Add `ContentResolver.writeContent` (#1)

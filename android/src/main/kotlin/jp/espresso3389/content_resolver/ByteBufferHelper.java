@@ -4,7 +4,7 @@ import java.nio.ByteBuffer;
 
 class ByteBufferHelper {
   static {
-    System.loadLibrary("bbhelper");
+    System.loadLibrary("dbufhelper");
   }
 
   public static native ByteBuffer newDirectBuffer(long ptr, long size);

@@ -12,7 +12,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  app_links: ^2.0.0+1
+  app_links: ^3.3.0
 
   content_resolver:
     # When depending on this package from a real application you should use:
