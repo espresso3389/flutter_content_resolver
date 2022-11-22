@@ -2,6 +2,7 @@ package jp.espresso3389.content_resolver
 
 import android.net.Uri
 import android.os.ParcelFileDescriptor
+import android.provider.OpenableColumns
 import androidx.annotation.NonNull
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin
@@ -43,7 +44,7 @@ class ContentResolverPlugin: FlutterPlugin, MethodCallHandler {
               val (address_, byteBuffer) = allocBuffer(buffer.size())
               address = address_
               byteBuffer.put(buffer.toByteArray())
-              result.success(hashMapOf("address" to address, "length" to buffer.size(), "mimeType" to getMimeType(uri)))
+              result.success(hashMapOf("address" to address, "length" to buffer.size(), "mimeType" to getMimeType(uri), "fileName" to getFileName(uri)))
             }
           }
           "writeContent" -> {
@@ -75,6 +76,16 @@ class ContentResolverPlugin: FlutterPlugin, MethodCallHandler {
     val cr = flutterPluginBinding.applicationContext.contentResolver
     return cr.getType(uri)
   }
+
+  private fun getFileName(uri: Uri): String? {
+    val cr = flutterPluginBinding.applicationContext.contentResolver
+    return cr.query(uri, null, null, null, null)?.use { cursor ->
+      val nameColumnIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+      cursor.moveToFirst()
+      return cursor.getString(nameColumnIndex)
+    }
+  }
+
   private fun openOutputStream(uri: Uri, mode: String): OutputStream {
     val cr = flutterPluginBinding.applicationContext.contentResolver
     return BufferedOutputStream(ParcelFileDescriptor.AutoCloseOutputStream(cr.openFileDescriptor(uri, mode)))
