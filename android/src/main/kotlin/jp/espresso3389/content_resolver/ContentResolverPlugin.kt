@@ -36,13 +36,14 @@ class ContentResolverPlugin: FlutterPlugin, MethodCallHandler {
     try {
       when (call.method) {
           "getContent" -> {
-            openInputStream(Uri.parse(call.arguments as String)).use {
+            val uri = Uri.parse(call.arguments as String)
+            openInputStream(uri).use {
               val buffer = ByteArrayOutputStream()
               it.copyTo(buffer)
               val (address_, byteBuffer) = allocBuffer(buffer.size())
               address = address_
               byteBuffer.put(buffer.toByteArray())
-              result.success(hashMapOf("address" to address, "length" to buffer.size()))
+              result.success(hashMapOf("address" to address, "length" to buffer.size(), "mimeType" to getMimeType(uri)))
             }
           }
           "writeContent" -> {
@@ -70,6 +71,10 @@ class ContentResolverPlugin: FlutterPlugin, MethodCallHandler {
     return BufferedInputStream(ParcelFileDescriptor.AutoCloseInputStream(cr.openFileDescriptor(uri, "r")))
   }
 
+  private fun getMimeType(uri: Uri): String? {
+    val cr = flutterPluginBinding.applicationContext.contentResolver
+    return cr.getType(uri)
+  }
   private fun openOutputStream(uri: Uri, mode: String): OutputStream {
     val cr = flutterPluginBinding.applicationContext.contentResolver
     return BufferedOutputStream(ParcelFileDescriptor.AutoCloseOutputStream(cr.openFileDescriptor(uri, mode)))
