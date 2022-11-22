@@ -75,7 +75,7 @@ class ContentItem {
   /// mimetype of the content
   String? mimeType;
 
-  /// mimetype of the content
+  /// filename of the content
   String? fileName;
 
   ContentItem(this.buffer, this.mimeType, this.fileName);
