@@ -4,10 +4,11 @@ packages:
   app_links:
     dependency: "direct main"
     description:
-      name: app_links
-      sha256: d1b2cf9ad5568cc5b9036cb3f8c42705b4ada26c4ef57de75323186eafe36a0d
-      url: "https://pub.dev"
-    source: hosted
+      path: app_links
+      ref: HEAD
+      resolved-ref: eeef1df4b44c894a069be1b4f4e1dcbb048e6428
+      url: "https://github.com/espresso3389/app_links"
+    source: git
     version: "3.3.0"
   app_links_macos:
     dependency: transitive
