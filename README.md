@@ -8,7 +8,7 @@ Add this to your package's pubspec.yaml file and execute flutter pub get:
 
 ```yaml
 dependencies:
-    content_resolver: ^0.2.0
+  content_resolver: ^0.3.0
 ```
 
 ## Usage
@@ -20,7 +20,7 @@ The following fragment is a use case with [app_links](https://pub.dev/packages/a
 ```dart
 _appLinks = AppLinks(onAppLink: (uri) async {
   // If the data is some image, you can pass the data directly to Image.data or something.
-  final Uint8List data = await ContentResolver.resolveContent(uri);
+  final Content content = await ContentResolver.resolveContent(uri);
   ...
 });
 ```
