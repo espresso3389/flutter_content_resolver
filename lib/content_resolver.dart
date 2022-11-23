@@ -1,34 +1,39 @@
 import 'dart:async';
 import 'dart:ffi';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
 /// Resolves `content:xxxx` style URI using [ContentResolver](https://developer.android.com/reference/android/content/ContentResolver).
 class ContentResolver {
   ContentResolver._(this.address, this.length, this.mimeType, this.fileName);
 
-  /// Buffer address.
+  /// Address of buffer that contains the content
   final int address;
 
-  /// Buffer length.
+  /// Byte size of the content
   final int length;
 
-  // Mime type
+  /// Mimetype of the content
   final String? mimeType;
 
-  // File name
+  /// File name of the content
   final String? fileName;
 
   static const MethodChannel _channel = const MethodChannel('content_resolver');
 
-  /// Directly get the content in [Uint8List] buffer.
-  static Future<ContentItem> resolveContent(String uri) async {
+  ///  Get the content of the specified `content:xxxx` style URI.
+  static Future<Content> resolveContent(String uri) async {
     final cr = await resolve(uri);
-    final ret =
-        ContentItem(Uint8List.fromList(cr.buffer), cr.mimeType, cr.fileName);
-
-    cr.dispose();
-    return ret;
+    try {
+      return Content(
+        data: Uint8List.fromList(cr.buffer),
+        mimeType: cr.mimeType,
+        fileName: cr.fileName,
+      );
+    } finally {
+      cr.dispose();
+    }
   }
 
   /// For advanced use only; obtaining [ContentResolver] that manages content buffer.
@@ -67,16 +72,21 @@ class ContentResolver {
       Pointer<Uint8>.fromAddress(address).asTypedList(length);
 }
 
-// represents content item
-class ContentItem {
-  /// byte buffer that contains the content
-  Uint8List buffer;
+///
+@immutable
+class Content {
+  /// Byte data of the content
+  final Uint8List data;
 
-  /// mimetype of the content
-  String? mimeType;
+  /// Mimetype of the content
+  final String? mimeType;
 
-  /// filename of the content
-  String? fileName;
+  /// File name of the content
+  final String? fileName;
 
-  ContentItem(this.buffer, this.mimeType, this.fileName);
+  const Content({
+    required this.data,
+    required this.mimeType,
+    required this.fileName,
+  });
 }

@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:typed_data';
 
 import 'package:app_links/app_links.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +15,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final _imageDataSubject = PublishSubject<Uint8List>();
+  final _contentSubject = PublishSubject<Content>();
   late final AppLinks _appLinks;
   late final StreamSubscription<Uri> _appLinksSub;
 
@@ -35,14 +34,14 @@ class _MyAppState extends State<MyApp> {
           'content://com.slack.fileprovider/',
           'content://com.Slack.fileprovider/');
 
-      _imageDataSubject.add(await ContentResolver.resolveContent(uriStr));
+      _contentSubject.add(await ContentResolver.resolveContent(uriStr));
     });
   }
 
   @override
   void dispose() {
     _appLinksSub.cancel();
-    _imageDataSubject.close();
+    _contentSubject.close();
     super.dispose();
   }
 
@@ -53,12 +52,12 @@ class _MyAppState extends State<MyApp> {
         appBar: AppBar(
           title: const Text('ContentResolver example app'),
         ),
-        body: StreamBuilder<Uint8List>(
-            stream: _imageDataSubject.stream,
+        body: StreamBuilder<Content>(
+            stream: _contentSubject.stream,
             builder: (context, snapshot) {
               return Center(
                 child: snapshot.hasData
-                    ? Image.memory(snapshot.data!)
+                    ? Image.memory(snapshot.data!.data)
                     : Text('Nothing received.'),
               );
             }),
