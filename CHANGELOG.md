@@ -1,3 +1,7 @@
+## 0.3.1
+
+- Update build.gradle to support recent Flutter
+
 ## 0.3.0
 
 - BREAKING CHANGE: ContentResolver.resolveContent now returns Content object rather than Uint8List.
