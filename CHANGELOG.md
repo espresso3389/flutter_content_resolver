@@ -1,3 +1,7 @@
+## 0.3.2
+
+- Android build environment updates
+
 ## 0.3.1
 
 - Update build.gradle to support recent Flutter

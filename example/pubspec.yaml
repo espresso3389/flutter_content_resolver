@@ -6,13 +6,17 @@ description: Demonstrates how to use the content_resolver plugin.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: ^3.5.0
 
 dependencies:
   flutter:
     sdk: flutter
 
-  app_links: ^3.5.0
+  # AppLinks no longer supports ACTION_SEND but I need it for this example.
+  app_links:
+    git:
+      url: https://github.com/espresso3389/app_links.git
+      path: app_links
 
   content_resolver:
     # When depending on this package from a real application you should use:
@@ -24,13 +28,17 @@ dependencies:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.6
+  cupertino_icons: ^1.0.8
 
-  rxdart: ^0.26.0
+  rxdart: ^0.28.0
+  path_provider: ^2.1.4
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+dependency_overrides:
+  win32: 5.5.5
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
