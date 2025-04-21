@@ -1,3 +1,7 @@
+## 0.3.3
+
+- Merge PR #6: Disable build-id link option to allow reproducible builds
+
 ## 0.3.2
 
 - Android build environment updates
