@@ -1,3 +1,7 @@
+## 0.3.4
+
+- Support Android 16 KB page size (#7)
+
 ## 0.3.3
 
 - Merge PR #6: Disable build-id link option to allow reproducible builds
