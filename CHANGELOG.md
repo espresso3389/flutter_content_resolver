@@ -1,3 +1,7 @@
+## 0.3.5
+
+- Update example and gradle related files in sync with latest Flutter's plugin skelton; this will improve latest Android/SDK compatibility
+
 ## 0.3.4
 
 - Support Android 16 KB page size (#7)

@@ -1,6 +1,6 @@
 name: content_resolver
 description: A plugin that help app to call ContentResolver on Android.
-version: 0.3.4
+version: 0.3.5
 repository: https://github.com/espresso3389/flutter_content_resolver
 
 environment:
