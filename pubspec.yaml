@@ -4,8 +4,8 @@ version: 0.3.4
 repository: https://github.com/espresso3389/flutter_content_resolver
 
 environment:
-  sdk: ">=3.3.0 <4.0.0"
-  flutter: ">=3.19.0"
+  sdk: ^3.9.2
+  flutter: '>=3.3.0'
 
 dependencies:
   flutter:
