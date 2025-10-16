@@ -1,3 +1,7 @@
+## 0.3.6
+
+- FIXED: #8 android Crash issue, when I use ContentResolver.resolveContent(uri)
+
 ## 0.3.5
 
 - Update example and gradle related files in sync with latest Flutter's plugin skelton; this will improve latest Android/SDK compatibility
