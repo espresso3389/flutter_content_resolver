@@ -8,8 +8,11 @@ Add this to your package's pubspec.yaml file and execute flutter pub get:
 
 ```yaml
 dependencies:
-  content_resolver: ^0.3.6
+  content_resolver: ^0.4.0
 ```
+
+Version 0.4.0 requires Flutter 3.44 and Dart 3.12. The bundled example uses Flutter 3.50 and AGP 9 with built-in Kotlin.
+On Flutter 3.44 with AGP 9, keep built-in Kotlin disabled in the host app. Use 0.3.6 if you cannot upgrade the Flutter SDK.
 
 ## Usage
 
