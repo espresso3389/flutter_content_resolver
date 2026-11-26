@@ -1,3 +1,8 @@
+## 0.4.0
+
+- Fix Android release builds with AGP 9 by migrating to built-in Kotlin (#9).
+- Raise the minimum supported SDKs to Flutter 3.44 and Dart 3.12.
+
 ## 0.3.6
 
 - FIXED: #8 android Crash issue, when I use ContentResolver.resolveContent(uri)
